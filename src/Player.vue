@@ -17,7 +17,7 @@
             label(for="uploadFolder")
               i.icon-folder
       .controls(v-if="filesLoaded")
-        .icon.previous.disabled(@click="_prev()")
+        .icon.previous(@click="_prev()")
           i.icon-backward
         .icon.playpause(@click="_playpause")
           i.icon-play(v-if="!isPlaying")
@@ -275,6 +275,10 @@ audio
   align-items: center
   justify-content: center
   cursor: pointer
+
+  &.icon:active,
+  &.icon:active label
+    transform: scale(1.25)
 
 .uploads
 
