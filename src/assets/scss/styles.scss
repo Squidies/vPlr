@@ -1,0 +1,21 @@
+@import '_base.sass';
+
+:root {
+  --bg: rgb(240, 240, 240);
+  --text: rgb(33, 33, 33);
+  --volume-bg: linear-gradient(to right, rgba(33, 33, 33, 0.7) 0%, rgba(33, 33, 33, 0.7) 50%, transparent 50%, transparent);
+}
+
+body {
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 13px;
+}
