@@ -1,40 +1,34 @@
 <template lang="pug">
   #audio
-    .menu-controls(v-if="track")
-      .currentTrackTime {{_displayCurrentTime.minutes}}:{{_displayCurrentTime.seconds}}
-      .currentTrackDuration {{_displayDuration.minutes}}:{{_displayDuration.seconds}}
-    #plr-controls
-      .uploads
-        span(v-if="playlist.length === 0") Upload files
-        i.icon.icon-cloud-upload(@click="_toggleUploadsMenu" title="Upload Files/Folder")
-        .upload-options(:class="{show: showingUploadsMenu}")
-          .icon.upload-files
-            input#uploadFiles(@change="_uploadFiles($event)" type="file" multiple)
-            label(for="uploadFiles")
-              i.icon-file-audio-o
-          .icon.upload-folder
-            input#uploadFolder(@change="_uploadFiles($event)" type="file" webkitdirectory directory multiple)
-            label(for="uploadFolder")
-              i.icon-folder
-      .controls(v-if="filesLoaded")
-        .icon.previous(@click="_prev()")
-          i.icon-backward
-        .icon.playpause(@click="_playpause")
-          i.icon-play(v-if="!isPlaying")
-          i.icon-pause(v-else)
-        .icon.stop(@click="_stop")
-          i.icon-stop
-        .icon.next(@click="_next")
-          i.icon-forward
-        .icon.volume-controls(style="display: none")
-    #plr-menu
+    plr-display(
+      v-bind:currenttime="current"
+      v-bind:trackduration="duration"
+      v-bind:trackloaded="track"
+    )
+    plr-controls(
+      v-bind:filesloaded="filesLoaded"
+      v-bind:showinguploadsmenu="showingUploadsMenu"
+      v-bind:isplaying="isPlaying"
+      v-on:toggleuploadsmenu="_toggleUploadsMenu"
+      v-on:uploadfiles="_uploadFiles"
+      v-on:prevclicked="_prev"
+      v-on:playpauseclicked="_playpause"
+      v-on:stopclicked="_stop"
+      v-on:nextclicked="_next"
+    )
 </template>
 
 <script>
-import _ from 'lodash'
+import PlrDisplay from './components/PlrDisplay.vue'
+import PlrControls from './components/PlrControls.vue'
 
 export default {
   name: 'vPlayer',
+
+  components: {
+    'plr-display': PlrDisplay,
+    'plr-controls': PlrControls
+  },
 
   data () {
     return {
@@ -210,30 +204,6 @@ export default {
     }
   },
 
-  computed: {
-    _displayDuration () {
-      let minutes = Math.floor(this.duration / 60)
-      let seconds = Math.floor(this.duration - minutes * 60)
-      let time = {
-        minutes: _.padStart(minutes, 1, '0'),
-        seconds: _.padStart(seconds, 2, '0')
-      }
-
-      return time
-    },
-
-    _displayCurrentTime () {
-      let minutes = Math.floor(this.current / 60)
-      let seconds = Math.floor(this.current - minutes * 60)
-      let time = {
-        minutes: _.padStart(minutes, 1, '0'),
-        seconds: _.padStart(seconds, 2, '0')
-      }
-
-      return time
-    }
-  },
-
   created () {
     if (this.playlist.length > 0) {
       this._resetPlaylist()
@@ -259,13 +229,6 @@ export default {
 audio
   display: none
 
-#plr-controls
-  display: flex
-  max-height: 30px
-
-.controls
-  display: flex
-
 .icon,
 .icon label
   width: 30px
@@ -279,33 +242,5 @@ audio
   &.icon:active,
   &.icon:active label
     transform: scale(1.25)
-
-.uploads
-
-  input
-    display: none
-
-  span
-    display: inline-block
-    position: relative
-    float: right
-    top: 6px
-
-  .upload-options
-    height: 0
-    opacity: 0
-    overflow: hidden
-    transition: all 300ms linear
-
-    &.show
-      height: 100%
-      opacity: 1
-      overflow: visible
-
-.menu-controls
-  display: flex
-  justify-content: space-between
-  font-size: 11px
-  padding: 0 8px
 
 </style>
