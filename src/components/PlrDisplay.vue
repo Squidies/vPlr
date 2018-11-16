@@ -2,8 +2,6 @@
 #plr-display(v-if="trackloaded")
   .currentTrackTime {{_displayCurrentTime.minutes}}:{{_displayCurrentTime.seconds}}
   .currentTrackDuration {{_displayDuration.minutes}}:{{_displayDuration.seconds}}
-  //- .currentTrackTime {{_displayCurrentTime.minutes}}:{{_displayCurrentTime.seconds}}
-  //- .currentTrackDuration {{_displayDuration.minutes}}:{{_displayDuration.seconds}}
 </template>
 
 <script>
@@ -49,5 +47,9 @@ export default {
   justify-content: space-between
   font-size: 11px
   padding: 0 8px
+
+.currentTrackDuration,
+.currentTrackTime
+  user-select: none
 
 </style>

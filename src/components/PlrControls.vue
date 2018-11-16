@@ -22,7 +22,10 @@
       i.icon-stop
     .icon.next(@click="$emit('nextclicked')")
       i.icon-forward
-    //- .icon.volume-controls(style="display: none")
+    .icon(@click="$emit('togglevolumeslider')")
+      i.icon-volume-off(v-if="volume < 33")
+      i.icon-volume-down(v-if="volume < 66 && volume >= 33")
+      i.icon-volume-up(v-if="volume >= 66")
 </template>
 
 <script>
@@ -30,7 +33,9 @@ export default {
   props: [
     'filesloaded',
     'showinguploadsmenu',
-    'isplaying'
+    'isplaying',
+    'volume',
+    'showingvolumeslider'
   ]
 }
 </script>

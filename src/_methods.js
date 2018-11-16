@@ -8,6 +8,11 @@ const _plrmethods = {
     this.isPlaying = !this.isPlaying
   },
 
+  _toggleVolumeSlider () {
+    console.log('toggled slider')
+    this.showingVolumeSlider = !this.showingVolumeSlider
+  },
+
   // Player Methods
   _resetPlaylist () {
     clearInterval(this.timer)
@@ -15,6 +20,7 @@ const _plrmethods = {
     this.isPlaying = false
     this.showingUploadsMenu = false
     this.filesLoaded = false
+    this.showingVolumeSlider = false
     this.playlist = []
     this.index = -1
     this.track = null
@@ -57,12 +63,14 @@ const _plrmethods = {
       this.playlist.push(track)
     })
 
+    // load the first track for playback
     this.index++
     this._loadtrack()
   },
 
   _loadtrack () {
     this.track = this.playlist[this.index]
+    this.track.audio.volume = this.volume
   },
 
   _playpause () {
@@ -104,7 +112,6 @@ const _plrmethods = {
       this._loadtrack()
       this._play()
       this.isPlaying = true
-      console.log('la')
     } else if (this.index < this.playlist.length - 1) {
       this._pause()
       this._resetTimer()
@@ -113,11 +120,9 @@ const _plrmethods = {
       this._loadtrack()
       this._play()
       this.isPlaying = true
-      console.log('de')
     } else {
       this._resetTimer()
       this._resetTracks()
-      console.log('da')
     }
   },
 
@@ -134,6 +139,11 @@ const _plrmethods = {
       this._loadtrack()
       this._play()
     }
+  },
+
+  _setVolume (e) {
+    this.volume = e.target.value
+    this.track.audio.volume = this.volume
   },
 
   _currentTime () {
