@@ -1,5 +1,5 @@
 <template lang="pug">
-  #audio
+  #audio(ref="vPlr")
     plr-display(
       v-bind:currenttime="current"
       v-bind:trackduration="duration"

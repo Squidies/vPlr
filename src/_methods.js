@@ -1,6 +1,10 @@
 const _plrmethods = {
   // UI Methods
   _toggleUploadsMenu () {
+    if (this.showingVolumeSlider) {
+      this.showingVolumeSlider = false
+    }
+
     this.showingUploadsMenu = !this.showingUploadsMenu
   },
 
@@ -9,7 +13,10 @@ const _plrmethods = {
   },
 
   _toggleVolumeSlider () {
-    console.log('toggled slider')
+    if (this.showingUploadsMenu) {
+      this.showingUploadsMenu = false
+    }
+
     this.showingVolumeSlider = !this.showingVolumeSlider
   },
 
