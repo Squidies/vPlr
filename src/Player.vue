@@ -21,7 +21,10 @@
     )
     .volume-controls(v-if="showingVolumeSlider")
       .slider
-        input(@input="_setVolume" list="tickmarks" :value="volume" type="range" min="0" max="1" step="0.01")
+        input#volumerange(type="range" min="0" max="1" step="0.01"
+          @input="_setVolume"
+          :value="volume"
+        )
         span {{_computedVolume}}%
 </template>
 
@@ -50,7 +53,8 @@ export default {
       track: null,
       duration: null,
       current: null,
-      timer: null
+      timer: null,
+      rangeflag: false
     }
   },
 
@@ -102,7 +106,6 @@ audio
     transform: scale(1.25)
 
 input[type="range"]
-  width: 100%
 
 .slider
   display: flex
@@ -110,5 +113,90 @@ input[type="range"]
   span
     display: inline-block
     margin: 0 8px
+
+input[type=range]
+  -webkit-appearance: none
+  width: 100%
+  margin: 5px 0
+
+input[type=range]:focus
+  outline: none
+
+input[type=range]::-webkit-slider-runnable-track
+  width: 100%
+  height: 3.1px
+  cursor: pointer
+  box-shadow: 0px 0px 0px #005900, 0px 0px 0px #007200
+  background: rgba(33, 33, 33, 0.7)
+  border-radius: 0px
+  border: 0px solid #010101
+
+input[type=range]::-webkit-slider-thumb
+  box-shadow: 0px 0px 0px rgba(0, 0, 62, 0.67), 0px 0px 0px rgba(0, 0, 88, 0.67)
+  border: 0.1px solid #000000
+  height: 10px
+  width: 10px
+  border-radius: 50px
+  background: #ffffff
+  cursor: pointer
+  -webkit-appearance: none
+  margin-top: -3.45px
+
+input[type=range]:focus::-webkit-slider-runnable-track
+  // background: rgba(148, 148, 148, 0.7)
+
+input[type=range]::-moz-range-track
+  width: 100%
+  height: 3.1px
+  cursor: pointer
+  box-shadow: 0px 0px 0px #005900, 0px 0px 0px #007200
+  background: rgba(33, 33, 33, 0.7)
+  border-radius: 0px
+  border: 0px solid #010101
+
+input[type=range]::-moz-range-thumb
+  box-shadow: 0px 0px 0px rgba(0, 0, 62, 0.67), 0px 0px 0px rgba(0, 0, 88, 0.67)
+  border: 0.1px solid #000000
+  height: 10px
+  width: 10px
+  border-radius: 50px
+  background: #ffffff
+  cursor: pointer
+
+input[type=range]::-ms-track
+  width: 100%
+  height: 3.1px
+  cursor: pointer
+  background: transparent
+  border-color: transparent
+  color: transparent
+
+input[type=range]::-ms-fill-lower
+  background: rgba(0, 0, 0, 0.7)
+  border: 0px solid #010101
+  border-radius: 0px
+  box-shadow: 0px 0px 0px #005900, 0px 0px 0px #007200
+
+input[type=range]::-ms-fill-upper
+  background: rgba(33, 33, 33, 0.7)
+  border: 0px solid #010101
+  border-radius: 0px
+  box-shadow: 0px 0px 0px #005900, 0px 0px 0px #007200
+
+input[type=range]::-ms-thumb
+  box-shadow: 0px 0px 0px rgba(0, 0, 62, 0.67), 0px 0px 0px rgba(0, 0, 88, 0.67)
+  border: 0.1px solid #000000
+  height: 10px
+  width: 10px
+  border-radius: 50px
+  background: #ffffff
+  cursor: pointer
+  height: 3.1px
+
+input[type=range]:focus::-ms-fill-lower
+  background: rgba(33, 33, 33, 0.7)
+
+input[type=range]:focus::-ms-fill-upper
+  background: rgba(148, 148, 148, 0.7)
 
 </style>
