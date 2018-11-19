@@ -1,7 +1,10 @@
 <template lang="pug">
 #plr-controls
   .uploads
-    span(v-if="!filesloaded") Upload files
+    em(
+      v-if="!filesloaded"
+      @click="$emit('toggleuploadsmenu')"
+    ) Upload files
     i.icon.icon-cloud-upload(@click="$emit('toggleuploadsmenu')" title="Upload Files/Folder")
     .upload-options(:class="{show: showinguploadsmenu}")
       .upload-files
@@ -58,12 +61,18 @@ export default {
 
   label
     cursor: pointer
+    position: relative
 
-  span
+  em
     display: inline-block
     position: relative
     float: right
     top: 6px
+
+  span
+    display: inline-block
+    top: 6px
+    position: absolute
 
   .upload-options
     height: 0
