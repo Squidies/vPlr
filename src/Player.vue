@@ -4,6 +4,8 @@
       v-bind:currenttime="current"
       v-bind:trackduration="duration"
       v-bind:trackloaded="track"
+      v-on:displaycurrenttimechange="_displayCurrentTimeChange"
+      v-on:changecurrenttime="_changeCurrentTime"
     )
     plr-controls(
       v-bind:filesloaded="filesLoaded"
@@ -83,9 +85,6 @@ export default {
 <style lang="sass">
 @import 'assets/icomoon/style.css'
 @import 'assets/scss/styles.scss'
-
-.disabled
-  opacity: 0.3
 
 // hide audio element
 audio

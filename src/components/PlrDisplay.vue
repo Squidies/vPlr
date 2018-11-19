@@ -1,6 +1,15 @@
 <template lang="pug">
 #plr-display(v-if="trackloaded")
   .currentTrackTime {{_displayCurrentTime.minutes}}:{{_displayCurrentTime.seconds}}
+  .playbackSlider
+    input(type="range"
+      :value="currenttime || 0"
+      min="0"
+      :max="trackduration"
+      step="0.01"
+      @input="$emit('displaycurrenttimechange', $event)"
+      @change="$emit('changecurrenttime', $event)"
+    )
   .currentTrackDuration {{_displayDuration.minutes}}:{{_displayDuration.seconds}}
 </template>
 
@@ -51,5 +60,10 @@ export default {
 .currentTrackDuration,
 .currentTrackTime
   user-select: none
+
+.playbackSlider
+  input[type="range"]
+    margin: 0px -25px 10px 0px
+    transform: translateY(-2px)
 
 </style>

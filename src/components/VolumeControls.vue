@@ -35,7 +35,7 @@ export default {
 input[type="range"]
   -webkit-appearance: none
   width: 100%
-  margin: 5px 0
+  margin: 10px 0px 10px 5px
 
   &:focus
     outline: none

@@ -153,6 +153,17 @@ const _plrmethods = {
     this.track.audio.volume = this.volume
   },
 
+  _displayCurrentTimeChange (e) {
+    let time = e.target.value
+    console.log(time)
+    // this.current = time
+  },
+
+  _changeCurrentTime (e) {
+    let time = e.target.value
+    this.current = this.track.audio.currentTime = time
+  },
+
   _currentTime () {
     if (this.track) {
       if (this.current === null) {
@@ -174,7 +185,7 @@ const _plrmethods = {
 
   _resetTimer () {
     clearInterval(this.timer)
-    this.track.audio.currentTime = 0
+    this.current = this.track.audio.currentTime = 0
     this.timer = null
     this.isPlaying = false
   }
