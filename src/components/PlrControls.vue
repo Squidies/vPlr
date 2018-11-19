@@ -4,14 +4,16 @@
     span(v-if="!filesloaded") Upload files
     i.icon.icon-cloud-upload(@click="$emit('toggleuploadsmenu')" title="Upload Files/Folder")
     .upload-options(:class="{show: showinguploadsmenu}")
-      .icon.upload-files
+      .upload-files
         input#uploadFiles(@change="$emit('uploadfiles', $event)" type="file" multiple)
         label(for="uploadFiles")
           i.icon-file-audio-o
-      .icon.upload-folder
+          span Files
+      .upload-folder
         input#uploadFolder(@change="$emit('uploadfiles', $event)" type="file" webkitdirectory directory multiple)
         label(for="uploadFolder")
           i.icon-folder
+          span Folder
   .controls(v-if="filesloaded")
     .icon.previous(@click="$emit('prevclicked')")
       i.icon-backward
@@ -54,6 +56,9 @@ export default {
   input
     display: none
 
+  label
+    cursor: pointer
+
   span
     display: inline-block
     position: relative
@@ -70,5 +75,14 @@ export default {
       height: 100%
       opacity: 1
       overflow: visible
+
+    & > div
+      display: flex
+      margin-left: 12px
+      margin-top: 4px
+
+    span
+      margin-left: 8px
+      top: 0
 
 </style>
