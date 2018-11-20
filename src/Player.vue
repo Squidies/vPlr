@@ -25,6 +25,7 @@
       v-bind:showingvolumeslider="showingVolumeSlider"
       v-bind:volume="volume"
       v-on:setvolume="_setVolume"
+      v-on:closevolumeslider="_toggleVolumeSlider"
     )
 </template>
 

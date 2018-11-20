@@ -3,6 +3,7 @@
   .slider
     input#volumerange(type="range" min="0" max="1" step="0.01"
       @input="$emit('setvolume', $event)"
+      @change="$emit('closevolumeslider')"
       :value="volume"
     )
     span {{_computedVolume}}%

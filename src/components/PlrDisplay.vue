@@ -66,5 +66,4 @@ export default {
     margin: 0px -25px 10px 0px
     transform: translateY(-2px)
 
-
 </style>
