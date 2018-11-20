@@ -56,7 +56,7 @@ export default {
       showingUploadsMenu: false,
       showingVolumeSlider: false,
       filesLoaded: false,
-      showingRemaining: localStorage.getItem('vPlr_showingRemaining') || true,
+      showingRemaining: localStorage.getItem('vPlr_showingRemaining') === 'true' ? true : false || false,
       playlist: [],
       index: -1,
       volume: localStorage.getItem('vPlr_volume') || 0.6,
