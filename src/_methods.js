@@ -155,8 +155,7 @@ const _plrmethods = {
 
   _displayCurrentTimeChange (e) {
     let time = e.target.value
-    console.log(time)
-    // this.current = time
+    this.current = time
   },
 
   _changeCurrentTime (e) {
