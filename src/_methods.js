@@ -22,6 +22,7 @@ const _plrmethods = {
 
   _toggleRemainingDuration () {
     this.displayTimeRemaining = !this.displayTimeRemaining
+    localStorage.setItem('vPlr_remaining-duration', this.displayTimeRemaining)
   },
 
   // Player Methods
