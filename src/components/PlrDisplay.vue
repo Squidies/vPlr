@@ -10,7 +10,9 @@
       @input="$emit('displaycurrenttimechange', $event)"
       @change="$emit('changecurrenttime', $event)"
     )
-  .currentTrackDuration {{_displayDuration.minutes}}:{{_displayDuration.seconds}}
+  .duration-remaining(@click="$emit('toggleremainingdur')")
+    .currentTrackTimeRemaining(v-if="displaytimeremaining") - {{_displayTimeRemaining.minutes}}:{{_displayTimeRemaining.seconds}}
+    .currentTrackDuration(v-else) {{_displayDuration.minutes}}:{{_displayDuration.seconds}}
 </template>
 
 <script>
@@ -20,7 +22,8 @@ export default {
   props: [
     'currenttime',
     'trackduration',
-    'trackloaded'
+    'trackloaded',
+    'displaytimeremaining'
   ],
 
   computed: {
@@ -38,6 +41,19 @@ export default {
     _displayCurrentTime () {
       let minutes = Math.floor(this.currenttime / 60)
       let seconds = Math.floor(this.currenttime - minutes * 60)
+      let time = {
+        minutes: _.padStart(minutes, 1, '0'),
+        seconds: _.padStart(seconds, 2, '0')
+      }
+
+      return time
+    },
+
+    _displayTimeRemaining () {
+      let remaining = this.trackduration - this.currenttime
+      let minutes = Math.floor(remaining / 60)
+      let seconds = Math.floor(remaining - minutes * 60)
+
       let time = {
         minutes: _.padStart(minutes, 1, '0'),
         seconds: _.padStart(seconds, 2, '0')
@@ -65,5 +81,8 @@ export default {
   input[type="range"]
     margin: 0px -25px 10px 0px
     transform: translateY(-2px)
+
+.duration-remaining
+  cursor: pointer
 
 </style>

@@ -20,6 +20,10 @@ const _plrmethods = {
     this.showingVolumeSlider = !this.showingVolumeSlider
   },
 
+  _toggleRemainingDuration () {
+    this.displayTimeRemaining = !this.displayTimeRemaining
+  },
+
   // Player Methods
   _resetPlaylist () {
     clearInterval(this.timer)
