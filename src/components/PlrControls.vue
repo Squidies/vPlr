@@ -55,6 +55,7 @@ export default {
   display: flex
 
 .uploads
+  cursor: pointer
 
   input
     display: none

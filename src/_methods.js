@@ -151,11 +151,12 @@ const _plrmethods = {
   _setVolume (e) {
     this.volume = e.target.value
     this.track.audio.volume = this.volume
+    localStorage.setItem('vPlr_volume', this.volume)
   },
 
   _displayCurrentTimeChange (e) {
     let time = e.target.value
-    console.log(time)
+    this.current = time
     // this.current = time
   },
 

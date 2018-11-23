@@ -25,6 +25,7 @@
       v-bind:showingvolumeslider="showingVolumeSlider"
       v-bind:volume="volume"
       v-on:setvolume="_setVolume"
+      v-on:closevolumemenu="_toggleVolumeSlider"
     )
 </template>
 
@@ -51,7 +52,7 @@ export default {
       filesLoaded: false,
       playlist: [],
       index: -1,
-      volume: 0.6,
+      volume: localStorage.getItem('vPlr_volume') || 0.6,
       track: null,
       duration: null,
       current: null,
