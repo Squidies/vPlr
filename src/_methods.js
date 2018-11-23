@@ -162,7 +162,6 @@ const _plrmethods = {
   _displayCurrentTimeChange (e) {
     let time = e.target.value
     this.current = time
-    // this.current = time
   },
 
   _changeCurrentTime (e) {

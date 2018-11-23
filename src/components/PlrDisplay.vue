@@ -50,8 +50,10 @@ export default {
     },
 
     _displayRemaining () {
-      let minutes = Math.floor((this.trackduration - this.currenttime) / 60)
-      let seconds = Math.floor((this.trackduration - this.currenttime) - minutes * 60)
+      let remaining = this.trackduration - this.currenttime
+      let minutes = Math.floor(remaining / 60)
+      let seconds = Math.floor(remaining - minutes * 60)
+
       let time = {
         minutes: _.padStart(minutes, 1, '0'),
         seconds: _.padStart(seconds, 2, '0')
@@ -82,4 +84,5 @@ export default {
 
 .remainingDuration
   cursor: pointer
+
 </style>
