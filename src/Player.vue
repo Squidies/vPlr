@@ -1,34 +1,38 @@
 <template lang="pug">
   #audio(ref="vPlr")
-    plr-display(
-      v-bind:currenttime="current"
-      v-bind:trackduration="duration"
-      v-bind:trackloaded="track"
-      v-bind:showingremaining="showingRemaining"
-      v-on:displaycurrenttimechange="_displayCurrentTimeChange"
-      v-on:changecurrenttime="_changeCurrentTime"
-      v-on:toggleremainingduration="_toggleRemainingDuration"
-    )
-    plr-controls(
-      v-bind:filesloaded="filesLoaded"
-      v-bind:showinguploadsmenu="showingUploadsMenu"
-      v-bind:isplaying="isPlaying"
-      v-bind:volume="_computedVolume"
-      v-bind:showingvolumeslider="showingVolumeSlider"
-      v-on:toggleuploadsmenu="_toggleUploadsMenu"
-      v-on:uploadfiles="_uploadFiles"
-      v-on:prevclicked="_prev"
-      v-on:playpauseclicked="_playpause"
-      v-on:stopclicked="_stop"
-      v-on:nextclicked="_next"
-      v-on:togglevolumeslider="_toggleVolumeSlider"
-    )
-    volume-controls(
-      v-bind:showingvolumeslider="showingVolumeSlider"
-      v-bind:volume="volume"
-      v-on:setvolume="_setVolume"
-      v-on:closevolumemenu="_toggleVolumeSlider"
-    )
+    .vPlr
+      plr-display(
+        v-bind:currenttime="current"
+        v-bind:trackduration="duration"
+        v-bind:trackloaded="track"
+        v-bind:showingremaining="showingRemaining"
+        v-on:displaycurrenttimechange="_displayCurrentTimeChange"
+        v-on:changecurrenttime="_changeCurrentTime"
+        v-on:toggleremainingduration="_toggleRemainingDuration"
+      )
+      plr-controls(
+        v-bind:filesloaded="filesLoaded"
+        v-bind:showinguploadsmenu="showingUploadsMenu"
+        v-bind:isplaying="isPlaying"
+        v-bind:volume="_computedVolume"
+        v-bind:showingvolumeslider="showingVolumeSlider"
+        v-on:toggleuploadsmenu="_toggleUploadsMenu"
+        v-on:uploadfiles="_uploadFiles"
+        v-on:prevclicked="_prev"
+        v-on:playpauseclicked="_playpause"
+        v-on:stopclicked="_stop"
+        v-on:nextclicked="_next"
+        v-on:togglevolumeslider="_toggleVolumeSlider"
+      )
+      volume-controls(
+        v-bind:showingvolumeslider="showingVolumeSlider"
+        v-bind:volume="volume"
+        v-on:setvolume="_setVolume"
+        v-on:closevolumemenu="_toggleVolumeSlider"
+      )
+    .logo
+      span Powered by
+      img(src="./assets/mp3.png")
 </template>
 
 <script>
@@ -94,6 +98,13 @@ export default {
 audio
   display: none
 
+img
+  width: 100%
+  max-width: 100%
+
+#audio
+  display: flex
+
 .icon,
 .icon label
   width: 30px
@@ -108,4 +119,7 @@ audio
   &.icon:active label
     transform: scale(1.25)
 
+.logo
+  max-width: 55px
+  font-size: 8px
 </style>
