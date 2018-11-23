@@ -20,6 +20,11 @@ const _plrmethods = {
     this.showingVolumeSlider = !this.showingVolumeSlider
   },
 
+  _toggleRemainingDuration () {
+    this.showingRemaining = !this.showingRemaining
+    localStorage.setItem('vPlr_showingRemaining', this.showingRemaining)
+  },
+
   // Player Methods
   _resetPlaylist () {
     clearInterval(this.timer)

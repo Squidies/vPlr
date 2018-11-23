@@ -4,8 +4,10 @@
       v-bind:currenttime="current"
       v-bind:trackduration="duration"
       v-bind:trackloaded="track"
+      v-bind:showingremaining="showingRemaining"
       v-on:displaycurrenttimechange="_displayCurrentTimeChange"
       v-on:changecurrenttime="_changeCurrentTime"
+      v-on:toggleremainingduration="_toggleRemainingDuration"
     )
     plr-controls(
       v-bind:filesloaded="filesLoaded"
@@ -50,6 +52,7 @@ export default {
       showingUploadsMenu: false,
       showingVolumeSlider: false,
       filesLoaded: false,
+      showingRemaining: localStorage.getItem('vPlr_showingRemaining') || true,
       playlist: [],
       index: -1,
       volume: localStorage.getItem('vPlr_volume') || 0.6,

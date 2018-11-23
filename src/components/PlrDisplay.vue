@@ -1,6 +1,6 @@
 <template lang="pug">
 #plr-display(v-if="trackloaded")
-  .currentTrackTime {{_displayCurrentTime.minutes}}:{{_displayCurrentTime.seconds}}
+  .currentTrackTime(title="Current Time") {{_displayCurrentTime.minutes}}:{{_displayCurrentTime.seconds}}
   .playbackSlider
     input(type="range"
       :value="currenttime || 0"
@@ -10,7 +10,9 @@
       @input="$emit('displaycurrenttimechange', $event)"
       @change="$emit('changecurrenttime', $event)"
     )
-  .currentTrackDuration {{_displayDuration.minutes}}:{{_displayDuration.seconds}}
+  .remainingDuration(@click="$emit('toggleremainingduration')")
+    .currentTrackRemaining(v-if="showingremaining" title="Remaining") -{{_displayRemaining.minutes}}:{{_displayRemaining.seconds}}
+    .currentTrackDuration(v-else title="Duration") {{_displayDuration.minutes}}:{{_displayDuration.seconds}}
 </template>
 
 <script>
@@ -20,7 +22,8 @@ export default {
   props: [
     'currenttime',
     'trackduration',
-    'trackloaded'
+    'trackloaded',
+    'showingremaining'
   ],
 
   computed: {
@@ -38,6 +41,17 @@ export default {
     _displayCurrentTime () {
       let minutes = Math.floor(this.currenttime / 60)
       let seconds = Math.floor(this.currenttime - minutes * 60)
+      let time = {
+        minutes: _.padStart(minutes, 1, '0'),
+        seconds: _.padStart(seconds, 2, '0')
+      }
+
+      return time
+    },
+
+    _displayRemaining () {
+      let minutes = Math.floor((this.trackduration - this.currenttime) / 60)
+      let seconds = Math.floor((this.trackduration - this.currenttime) - minutes * 60)
       let time = {
         minutes: _.padStart(minutes, 1, '0'),
         seconds: _.padStart(seconds, 2, '0')
@@ -66,5 +80,6 @@ export default {
     margin: 0px -25px 10px 0px
     transform: translateY(-2px)
 
-
+.remainingDuration
+  cursor: pointer
 </style>
