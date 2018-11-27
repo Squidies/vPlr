@@ -1,236 +1,78 @@
 <template lang="pug">
-  #audio
-    .menu-controls(v-if="track")
-      .currentTrackTime {{_displayCurrentTime.minutes}}:{{_displayCurrentTime.seconds}}
-      .currentTrackDuration {{_displayDuration.minutes}}:{{_displayDuration.seconds}}
-    #plr-controls
-      .uploads
-        span(v-if="playlist.length === 0") Upload files
-        i.icon.icon-cloud-upload(@click="_toggleUploadsMenu" title="Upload Files/Folder")
-        .upload-options(:class="{show: showingUploadsMenu}")
-          .icon.upload-files
-            input#uploadFiles(@change="_uploadFiles($event)" type="file" multiple)
-            label(for="uploadFiles")
-              i.icon-file-audio-o
-          .icon.upload-folder
-            input#uploadFolder(@change="_uploadFiles($event)" type="file" webkitdirectory directory multiple)
-            label(for="uploadFolder")
-              i.icon-folder
-      .controls(v-if="filesLoaded")
-        .icon.previous.disabled(@click="_prev()")
-          i.icon-backward
-        .icon.playpause(@click="_playpause")
-          i.icon-play(v-if="!isPlaying")
-          i.icon-pause(v-else)
-        .icon.stop(@click="_stop")
-          i.icon-stop
-        .icon.next(@click="_next")
-          i.icon-forward
-        .icon.volume-controls(style="display: none")
-    #plr-menu
+  #audio(ref="vPlr")
+    .vPlr
+      plr-display(
+        v-bind:currenttime="current"
+        v-bind:trackduration="duration"
+        v-bind:trackloaded="track"
+        v-bind:showingremaining="showingRemaining"
+        v-on:displaycurrenttimechange="_displayCurrentTimeChange"
+        v-on:changecurrenttime="_changeCurrentTime"
+        v-on:toggleremainingduration="_toggleRemainingDuration"
+      )
+      plr-controls(
+        v-bind:filesloaded="filesLoaded"
+        v-bind:showinguploadsmenu="showingUploadsMenu"
+        v-bind:isplaying="isPlaying"
+        v-bind:volume="_computedVolume"
+        v-bind:showingvolumeslider="showingVolumeSlider"
+        v-on:toggleuploadsmenu="_toggleUploadsMenu"
+        v-on:uploadfiles="_uploadFiles"
+        v-on:prevclicked="_prev"
+        v-on:playpauseclicked="_playpause"
+        v-on:stopclicked="_stop"
+        v-on:nextclicked="_next"
+        v-on:togglevolumeslider="_toggleVolumeSlider"
+      )
+      volume-controls(
+        v-bind:showingvolumeslider="showingVolumeSlider"
+        v-bind:volume="volume"
+        v-on:setvolume="_setVolume"
+        v-on:closevolumemenu="_toggleVolumeSlider"
+      )
+    .logo
+      span Powered by
+      img(src="./assets/mp3.png")
 </template>
 
 <script>
-import _ from 'lodash'
+import _methods from './_methods.js'
+import PlrDisplay from './components/PlrDisplay.vue'
+import PlrControls from './components/PlrControls.vue'
+import VolumeControls from './components/VolumeControls.vue'
 
 export default {
   name: 'vPlayer',
+
+  components: {
+    'plr-display': PlrDisplay,
+    'plr-controls': PlrControls,
+    'volume-controls': VolumeControls
+  },
 
   data () {
     return {
       isPlaying: false,
       showingUploadsMenu: false,
+      showingVolumeSlider: false,
       filesLoaded: false,
+      showingRemaining: localStorage.getItem('vPlr_showingRemaining') === 'true' ? true : false || false,
       playlist: [],
       index: -1,
+      volume: localStorage.getItem('vPlr_volume') || 0.6,
       track: null,
       duration: null,
       current: null,
-      timer: null
+      timer: null,
+      rangeflag: false
     }
   },
 
-  methods: {
-    // UI Methods
-    _toggleUploadsMenu () {
-      this.showingUploadsMenu = !this.showingUploadsMenu
-    },
-
-    _togglePlayPause () {
-      this.isPlaying = !this.isPlaying
-    },
-
-    // Player Methods
-    _resetPlaylist () {
-      clearInterval(this.timer)
-      this._stop()
-      this.isPlaying = false
-      this.showingUploadsMenu = false
-      this.filesLoaded = false
-      this.playlist = []
-      this.index = -1
-      this.track = null
-      this.duration = null
-      this.current = null
-      this.timer = null
-    },
-
-    _resetTracks () {
-      clearInterval(this.timer)
-      this._stop()
-      this.isPlaying = false
-      this.showingUploadsMenu = false
-      this.index = -1
-      this.track = null
-      this.duration = null
-      this.current = null
-      this.timer = null
-    },
-
-    _uploadFiles (e) {
-      if (this.playlist.length > 0) {
-        this._resetPlaylist()
-      }
-
-      // load files
-      this.filesLoaded = true
-      this.showingUploadsMenu = false
-
-      let files = [...e.target.files]
-
-      // create track files and push to playlist
-      files.forEach(file => {
-        let audio = new Audio(URL.createObjectURL(file))
-        let track = {
-          name: file.name,
-          audio: audio
-        }
-
-        this.playlist.push(track)
-      })
-
-      this.index++
-      this._loadtrack()
-    },
-
-    _loadtrack () {
-      this.track = this.playlist[this.index]
-    },
-
-    _playpause () {
-      if (this.index === -1 && this.filesLoaded) {
-        ++this.index
-        this._loadtrack()
-      }
-
-      if (this.isPlaying) {
-        this._pause()
-      } else {
-        this._play()
-      }
-
-      this._togglePlayPause()
-    },
-
-    _play () {
-      this.duration = this.track.audio.duration
-      this.track.audio.play()
-      this._currentTime()
-    },
-
-    _pause () {
-      this.track.audio.pause()
-    },
-
-    _stop () {
-      this.track.audio.pause()
-      this.track.audio.currentTime = 0
-      this._togglePlayPause()
-    },
-
-    _next () {
-      if (this.index === -1 && this.playlist) {
-        ++this.index
-        this._loadtrack()
-        this._play()
-        this.isPlaying = true
-      } else if (this.index < this.playlist.length - 1) {
-        this._pause()
-        this._resetTimer()
-        this.track = null
-        ++this.index
-        this._loadtrack()
-        this._play()
-        this.isPlaying = true
-      } else {
-        this._resetTimer()
-        this._resetTracks()
-      }
-    },
-
-    _prev () {
-      if (this.index === 0) {
-        this._pause()
-        this.isPlaying = false
-        this.track.audio.currentTime = 0
-      } else {
-        this._pause()
-        this.track.audio.currentTime = 0
-        this.track = null
-        --this.index
-        this._loadtrack()
-        this._play()
-      }
-    },
-
-    _currentTime () {
-      if (this.track) {
-        if (this.current === null) {
-          this.current = 0
-        }
-
-        this.timer = setInterval(current => {
-          this.current = this.track.audio.currentTime
-          this._timeCheck()
-        }, 1000)
-      }
-    },
-
-    _timeCheck () {
-      if (this.current === this.duration) {
-        this._next()
-      }
-    },
-
-    _resetTimer () {
-      this.track.audio.currentTime = 0
-      clearInterval(this.timer)
-      this.timer = null
-      this.isPlaying = false
-    }
-  },
+  methods: _methods,
 
   computed: {
-    _displayDuration () {
-      let minutes = Math.floor(this.duration / 60)
-      let seconds = Math.floor(this.duration - minutes * 60)
-      let time = {
-        minutes: _.padStart(minutes, 1, '0'),
-        seconds: _.padStart(seconds, 2, '0')
-      }
-
-      return time
-    },
-
-    _displayCurrentTime () {
-      let minutes = Math.floor(this.current / 60)
-      let seconds = Math.floor(this.current - minutes * 60)
-      let time = {
-        minutes: _.padStart(minutes, 1, '0'),
-        seconds: _.padStart(seconds, 2, '0')
-      }
-
-      return time
+    _computedVolume () {
+      return Math.floor(this.volume * 100)
     }
   },
 
@@ -252,18 +94,15 @@ export default {
 @import 'assets/icomoon/style.css'
 @import 'assets/scss/styles.scss'
 
-.disabled
-  opacity: 0.3
-
 // hide audio element
 audio
   display: none
 
-#plr-controls
-  display: flex
-  max-height: 30px
+img
+  width: 100%
+  max-width: 100%
 
-.controls
+#audio
   display: flex
 
 .icon,
@@ -276,32 +115,11 @@ audio
   justify-content: center
   cursor: pointer
 
-.uploads
+  &.icon:active,
+  &.icon:active label
+    transform: scale(1.25)
 
-  input
-    display: none
-
-  span
-    display: inline-block
-    position: relative
-    float: right
-    top: 6px
-
-  .upload-options
-    height: 0
-    opacity: 0
-    overflow: hidden
-    transition: all 300ms linear
-
-    &.show
-      height: 100%
-      opacity: 1
-      overflow: visible
-
-.menu-controls
-  display: flex
-  justify-content: space-between
-  font-size: 11px
-  padding: 0 8px
-
+.logo
+  max-width: 55px
+  font-size: 8px
 </style>
